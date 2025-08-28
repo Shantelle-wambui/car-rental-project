@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.models.models import Customer, Car
+from db.models.models import Customer, Car, Rental
+from datetime import datetime
 #import database engine and session factory
 #then i import model class customer
 
@@ -70,4 +71,33 @@ def create_car(model, brand, price_per_day):
 #close the session
 #and return the newly created car
 
+def create_rental(customer_id, car_id, start_date, end_date):
+    session = Session()
+#then i create a function to create a new rental record    
+    
+    car = session.query(Car).filter(Car.id == car_id).first()
+#first i find the car being rented
+    
+    if car:
+        car.available = False
+#if the car exists,mark it as unavailable
+    
+    rental = Rental(
+        customer_id=customer_id,
+        car_id=car_id,
+        start_date=datetime.strptime(start_date, "%Y-%m-%d").date(),
+        end_date=datetime.strptime(end_date, "%Y-%m-%d").date()
+    )
+#then i create a new rental object with the provided data
+# convert string dates to proper date object
+
+
+    session.add(rental)
+    session.commit()
+    session.close()
+    return rental
+#after i add the new rental to the session
+#commit the changes to save the rental to the database
+#close the session
+#then return the newly created rental
 
