@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.models.models import Customer
+from db.models.models import Customer, Car
 #import database engine and session factory
 #then i import model class customer
 
@@ -32,6 +32,42 @@ def create_customer(name, email, driver_license):
 #create a new session
 #create a new customer object with the provided data
 #add the new customer to the session
-#commit the changes to savee the customer to the database
+#commit the changes to save the customer to the database
 #close the session
 #then return the newly created customer
+
+
+def get_cars():
+    session = Session()
+    cars = session.query(Car).all()
+    session.close()
+    return cars
+#then i create a function to get all cars from the database
+#query all cars from the databasr
+#close the session 
+#then return the list of cars
+
+def get_available_cars():
+    session = Session()
+    cars = session.query(Car).filter(Car.available == True).all()
+    session.close()
+    return cars
+#after, i create a function to get only available cars
+#query cars where available=true
+
+
+def create_car(model, brand, price_per_day):
+    session = Session()
+    car = Car(model=model, brand=brand, price_per_day=price_per_day)
+    session.add(car)
+    session.commit()
+    session.close()
+    return car
+#here i create a function to create a new car
+#create a new car object with the provided data
+#add the new car to the session
+#commit the changes to save the car to the database
+#close the session
+#and return the newly created car
+
+
